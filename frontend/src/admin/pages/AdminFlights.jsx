@@ -138,7 +138,7 @@ export default function AdminFlights() {
           <h1 className="text-2xl font-bold text-base-content">Flight Inventory</h1>
           <p className="text-base-content/60">Manage available flights and schedules</p>
         </div>
-        <button onClick={() => handleOpenModal()} className="btn btn-primary gap-2">
+        <button onClick={() => handleOpenModal()} className="btn btn-primary-custom gap-2">
           <Plus size={18} /> Add Flight
         </button>
       </div>
@@ -147,7 +147,7 @@ export default function AdminFlights() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-base-100 p-4 rounded-xl border border-base-300 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg  flex items-center justify-center">
               <Plane size={20} className="text-blue-600 dark:text-blue-400" />
             </div>
             <div>
@@ -158,7 +158,7 @@ export default function AdminFlights() {
         </div>
         <div className="bg-base-100 p-4 rounded-xl border border-base-300 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg  flex items-center justify-center">
               <Plane size={20} className="text-green-600 dark:text-green-400" />
             </div>
             <div>
@@ -169,7 +169,7 @@ export default function AdminFlights() {
         </div>
         <div className="bg-base-100 p-4 rounded-xl border border-base-300 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg  flex items-center justify-center">
               <Users size={20} className="text-purple-600 dark:text-purple-400" />
             </div>
             <div>

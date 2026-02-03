@@ -162,7 +162,7 @@ export default function AdminUsers() {
           <h1 className="text-2xl font-bold text-base-content">Users & Roles</h1>
           <p className="text-base-content/60">Manage admin users and their permissions</p>
         </div>
-        <button onClick={() => handleOpenModal()} className="btn btn-primary gap-2">
+        <button onClick={() => handleOpenModal()} className="btn btn-primary-custom gap-2">
           <Plus size={18} /> Add User
         </button>
       </div>
@@ -171,7 +171,7 @@ export default function AdminUsers() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-base-100 p-4 rounded-xl border border-base-300 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center">
               <Users size={20} className="text-primary" />
             </div>
             <div>
@@ -182,7 +182,7 @@ export default function AdminUsers() {
         </div>
         <div className="bg-base-100 p-4 rounded-xl border border-base-300 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg  flex items-center justify-center">
               <CheckCircle size={20} className="text-green-600 dark:text-green-400" />
             </div>
             <div>
@@ -193,7 +193,7 @@ export default function AdminUsers() {
         </div>
         <div className="bg-base-100 p-4 rounded-xl border border-base-300 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center">
               <ShieldAlert size={20} className="text-red-600 dark:text-red-400" />
             </div>
             <div>
@@ -204,7 +204,7 @@ export default function AdminUsers() {
         </div>
         <div className="bg-base-100 p-4 rounded-xl border border-base-300 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center">
               <ShieldCheck size={20} className="text-blue-600 dark:text-blue-400" />
             </div>
             <div>

@@ -96,11 +96,11 @@ export default function AdminBookings() {
           <p className="text-base-content/60">Manage all customer bookings</p>
         </div>
         <div className="flex gap-3">
-          <button className="btn btn-ghost btn-sm gap-2">
+          <button className="btn btn-ghost p-6 btn-sm gap-2">
             <Download size={16} />
             Export
           </button>
-          <button className="btn btn-primary btn-sm gap-2">
+          <button className="btn btn-primary-custom btn-sm gap-2">
             <Plus size={16} />
             New Booking
           </button>

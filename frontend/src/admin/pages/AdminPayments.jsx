@@ -112,7 +112,7 @@ export default function AdminPayments() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-base-100 rounded-xl p-4 shadow-sm border border-base-300">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+            <div className="p-3 rounded-xl  text-green-600 dark:text-green-400">
               <DollarSign size={24} />
             </div>
             <div>
@@ -123,7 +123,7 @@ export default function AdminPayments() {
         </div>
         <div className="bg-base-100 rounded-xl p-4 shadow-sm border border-base-300">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400">
+            <div className="p-3 rounded-xl  text-red-600 dark:text-red-400">
               <AlertCircle size={24} />
             </div>
             <div>

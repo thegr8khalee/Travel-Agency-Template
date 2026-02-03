@@ -131,14 +131,14 @@ export default function AdminDashboard() {
             Welcome back! Here's what's happening today.
           </p>
         </div>
-        <div className="flex gap-3">
-          <select className="select select-bordered select-sm">
+        <div className="flex gap-3 items-center">
+          <select className="select select-bordered rounded-full select-sm">
             <option>Last 7 days</option>
             <option>Last 30 days</option>
             <option>This month</option>
             <option>This year</option>
           </select>
-          <Link to="/admin/reports" className="btn btn-primary btn-sm gap-2">
+          <Link to="/admin/reports" className="btn btn-primary-custom btn-sm gap-2">
             <TrendingUp size={16} />
             View Reports
           </Link>

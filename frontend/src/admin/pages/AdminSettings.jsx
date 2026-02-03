@@ -49,7 +49,7 @@ export default function AdminSettings() {
               <span>{saveStatus}</span>
             </div>
           )}
-          <button onClick={handleSave} className="btn btn-primary gap-2">
+          <button onClick={handleSave} className="btn btn-primary-custom gap-2">
             <Save size={18} /> Save Changes
           </button>
         </div>

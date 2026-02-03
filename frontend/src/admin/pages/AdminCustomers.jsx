@@ -134,13 +134,13 @@ export default function AdminCustomers() {
           <p className="text-base-content/60">Manage your customer database</p>
         </div>
         <div className="flex gap-3">
-          <button className="btn btn-ghost btn-sm gap-2">
+          <button className="btn btn-ghost p-6 btn-sm gap-2">
             <Download size={16} />
             Export
           </button>
           <button
             onClick={() => setShowModal(true)}
-            className="btn btn-primary btn-sm gap-2"
+            className="btn btn-primary-custom btn-sm gap-2"
           >
             <Plus size={16} />
             Add Customer

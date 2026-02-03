@@ -134,13 +134,13 @@ export default function AdminServiceRequests() {
           <p className="text-base-content/60">Manage visa, study abroad, Hajj, and corporate requests</p>
         </div>
         <div className="flex gap-3">
-          <button className="btn btn-ghost btn-sm gap-2">
+          <button className="btn p-6 btn-ghost btn-sm gap-2">
             <Download size={16} />
             Export
           </button>
           <button
             onClick={() => setShowModal(true)}
-            className="btn btn-primary btn-sm gap-2"
+            className="btn btn-primary-custom btn-sm gap-2"
           >
             <Plus size={16} />
             New Request

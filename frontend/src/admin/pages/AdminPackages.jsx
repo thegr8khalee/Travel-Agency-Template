@@ -145,7 +145,7 @@ export default function AdminPackages() {
           <h1 className="text-2xl font-bold text-base-content">Packages</h1>
           <p className="text-base-content/60">Manage tour and holiday packages</p>
         </div>
-        <button onClick={() => setShowModal(true)} className="btn btn-primary btn-sm gap-2">
+        <button onClick={() => setShowModal(true)} className="btn btn-primary-custom btn-sm gap-2">
           <Plus size={16} />
           Create Package
         </button>
@@ -199,33 +199,33 @@ export default function AdminPackages() {
       {/* Packages Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredPackages.map((pkg) => (
-          <div key={pkg.id} className="bg-base-100 rounded-2xl shadow-sm border border-base-300 overflow-hidden group">
+          <div key={pkg.id} className="bg-base-100 p-1 rounded-2xl shadow-sm border border-base-300 overflow-hidden group">
             <div className="relative h-48">
               <img
                 src={pkg.image}
                 alt={pkg.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                className="w-full rounded-xl h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
               <div className="absolute top-3 left-3 flex gap-2">
                 {pkg.featured && (
-                  <span className="bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded flex items-center gap-1">
+                  <span className="bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
                     <Star size={12} /> Featured
                   </span>
                 )}
-                <span className={`text-xs font-bold px-2 py-1 rounded ${
+                <span className={`text-xs font-bold px-2 py-1 rounded-full ${
                   pkg.status === 'active' ? 'bg-green-500 text-white' : 'bg-gray-500 text-white'
                 }`}>
                   {pkg.status}
                 </span>
               </div>
               {pkg.originalPrice && (
-                <div className="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                <div className="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
                   {Math.round((1 - pkg.price / pkg.originalPrice) * 100)}% OFF
                 </div>
               )}
             </div>
             
-            <div className="p-4">
+            <div className="p-1">
               <h3 className="font-bold text-lg text-base-content">{pkg.name}</h3>
               <div className="flex items-center gap-1 text-base-content/60 text-sm mt-1">
                 <MapPin size={14} />
@@ -261,7 +261,7 @@ export default function AdminPackages() {
                 </button>
                 <button
                   onClick={() => toggleFeatured(pkg.id, pkg.featured)}
-                  className={`btn btn-sm flex-1 ${pkg.featured ? 'btn-warning' : 'btn-ghost'}`}
+                  className={`btn btn-sm rounded-full flex-1 ${pkg.featured ? 'btn-primary' : 'btn-ghost'}`}
                 >
                   <Star size={16} />
                 </button>
@@ -455,7 +455,7 @@ export default function AdminPackages() {
 
               <div className="modal-action">
                 <button type="button" onClick={closeModal} className="btn btn-ghost">Cancel</button>
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="btn btn-primary-custom">
                   {editingPackage ? 'Update Package' : 'Create Package'}
                 </button>
               </div>
