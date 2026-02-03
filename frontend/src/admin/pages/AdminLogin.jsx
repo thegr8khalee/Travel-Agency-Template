@@ -53,7 +53,7 @@ export default function AdminLogin() {
           />
             <div>
               <h1 className="text-2xl font-medium text-white">ABJ&H Travels</h1>
-              <p className="text-base-content/80 text-sm">Management Portal</p>
+              <p className="text-white/80 text-sm">Management Portal</p>
             </div>
           </div>
         </div>
@@ -65,7 +65,7 @@ export default function AdminLogin() {
               Travel Management Hub
             </span>
           </h2>
-          <p className="text-base-content/80 text-lg max-w-md">
+          <p className="text-white/80 text-lg max-w-md">
             Manage bookings, customers, packages, and more from one powerful dashboard.
           </p>
 
@@ -79,14 +79,14 @@ export default function AdminLogin() {
             ].map((stat, i) => (
               <div key={i} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
                 <p className="text-2xl font-medium text-white">{stat.value}</p>
-                <p className="text-sm text-base-content/40">{stat.title}</p>
-                <p className="text-xs text-base-content/60">{stat.desc}</p>
+                <p className="text-white/60 text-sm">{stat.title}</p>
+                <p className="text-white/40 text-xs">{stat.desc}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="relative z-10 text-base-content/60 text-sm">
+        <div className="relative z-10 text-white/60 text-sm">
           © 2026 TravelAgency Nigeria. All rights reserved.
         </div>
       </div>
@@ -114,7 +114,7 @@ export default function AdminLogin() {
             </div>
 
             {error && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm">
+              <div className="mb-6 p-4 bg-error/10 border border-error/20 text-error rounded-xl text-sm">
                 {error}
               </div>
             )}
@@ -131,7 +131,7 @@ export default function AdminLogin() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email or username"
-                    className="w-full pl-12 pr-4 py-3 border border-base-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                    className="w-full pl-12 pr-4 py-3 bg-transparent text-base-content placeholder-base-content/40 border border-base-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                     required
                   />
                 </div>
@@ -148,7 +148,7 @@ export default function AdminLogin() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
-                    className="w-full pl-12 pr-12 py-3 border border-base-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                    className="w-full pl-12 pr-12 py-3 bg-transparent text-base-content placeholder-base-content/40 border border-base-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                     required
                   />
                   <button
