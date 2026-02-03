@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div>
-            <h3 className="text-white text-lg font-bold mb-4">TravelPro</h3>
+            <h3 className="text-white text-lg font-bold mb-4">ABJ & H Travels</h3>
             <p className="text-sm">
               Your one-stop destination for flights, hotels, visa assistance, and holiday packages. Trusted by thousands of travelers.
             </p>
