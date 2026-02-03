@@ -1,0 +1,112 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark;
+}
+
+/* Customize Light Theme */
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  color-scheme: light;
+  --color-primary: #005EE9;
+  --color-primary-content: #ffffff;
+  --color-secondary: #0A2540;
+  --color-secondary-content: #ffffff;
+  --color-accent: #FF9F1C;
+  --color-accent-content: #0A2540;
+  --color-neutral: #0A2540;
+  --color-neutral-content: #F9FAFB;
+  --color-base-100: #ffffff;
+  --color-base-200: #F6F8FB;
+  --color-base-300: #E5E7EB;
+  --color-base-content: #111827;
+  --color-info: #005EE9;
+  --color-info-content: #ffffff;
+  --color-success: #22c55e;
+  --color-success-content: #ffffff;
+  --color-warning: #FF9F1C;
+  --color-warning-content: #0A2540;
+  --color-error: #ef4444;
+  --color-error-content: #ffffff;
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+}
+
+/* Customize Dark Theme */
+@plugin "daisyui/theme" {
+  name: "dark";
+  prefersdark: true;
+  color-scheme: dark;
+  --color-primary: #005EE9;
+  --color-primary-content: #ffffff;
+  --color-secondary: #1F2937;
+  --color-secondary-content: #F9FAFB;
+  --color-accent: #FF9F1C;
+  --color-accent-content: #0B1220;
+  --color-neutral: #1F2937;
+  --color-neutral-content: #F9FAFB;
+  --color-base-100: #0B1220;
+  --color-base-200: #111827;
+  --color-base-300: #1F2937;
+  --color-base-content: #F9FAFB;
+  --color-info: #005EE9;
+  --color-info-content: #ffffff;
+  --color-success: #22c55e;
+  --color-success-content: #ffffff;
+  --color-warning: #FF9F1C;
+  --color-warning-content: #0B1220;
+  --color-error: #ef4444;
+  --color-error-content: #ffffff;
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+}
+
+/* Custom color utilities */
+@theme {
+  --color-primary-soft: #EAF2FF;
+  --color-primary-muted: #9DBBFF;
+  --color-accent-soft: #FFE7C2;
+  --color-navy: #0A2540;
+  --color-muted: #6B7280;
+  --color-text-muted: #9CA3AF;
+  --color-dark-bg: #0B1220;
+  --color-dark-surface: #111827;
+  --color-dark-elevated: #1F2937;
+  --color-dark-border: #1F2A44;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Custom Button Styles */
+.btn-primary-custom {
+  @apply bg-primary text-white font-bold p-6 rounded-full 
+         hover:bg-primary/90 shadow-none border-none
+         transition-all duration-200 ease-out;
+}
+
+.btn-primary-outline {
+  @apply bg-transparent text-primary font-bold p-6 rounded-full 
+         border-2 border-primary
+         hover:bg-primary hover:text-white hover:-translate-y-0.5
+         active:translate-y-0
+         transition-all duration-200 ease-out;
+}
+
+.btn-accent-custom {
+  @apply bg-accent text-navy font-bold py-3 px-6 rounded-lg
+         hover:bg-accent/90 hover:-translate-y-0.5
+         active:translate-y-0
+         transition-all duration-200 ease-out;
+}
+
+.btn-secondary-custom {
+  @apply bg-base-200 text-base-content font-semibold py-3 px-6 rounded-lg
+         hover:bg-base-300 hover:-translate-y-0.5
+         active:translate-y-0
+         transition-all duration-200 ease-out;
+}
+
