@@ -48,7 +48,7 @@ const Footer = () => {
                 <Phone size={16} /> +123 456 7890
               </li>
               <li className="flex items-center gap-2">
-                <Mail size={16} /> support@travelpro.com
+                <Mail size={16} /> support@abjandhtravels.com
               </li>
               <li className="flex items-center gap-2">
                 <MapPin size={16} /> 123 Travel Street, Lagos, Nigeria

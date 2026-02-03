@@ -26,8 +26,8 @@ const Contact = () => {
                         </div>
                         <div>
                             <h3 className="font-bold text-lg mb-1 text-base-content">Email Us</h3>
-                            <p className="text-base-content/70">info@travelpro.com</p>
-                            <p className="text-base-content/70">support@travelpro.com</p>
+                            <p className="text-base-content/70">info@abjandhtravels.com</p>
+                            <p className="text-base-content/70">support@abjandhtravels.com</p>
                         </div>
                     </div>
 
