@@ -1,6 +1,8 @@
 import { useState, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BookingModal from '../components/BookingModal';
+import { useAmadeusSearch } from '../hooks/useAmadeusSearch';
+import LocationAutocomplete from '../components/LocationAutocomplete';
 import {
   Plane,
   ChevronDown,
@@ -11,6 +13,7 @@ import {
   Info,
   ChevronUp,
   Briefcase,
+  Loader2,
 } from 'lucide-react';
 
 // --- MOCK DATA GENERATOR ---
@@ -338,6 +341,7 @@ const DatePickerField = ({ label, value, onChange, minDate }) => {
 
 const Flights = () => {
   const navigate = useNavigate();
+  const { searchFlights: searchAmadeusFlights, loading: amadeusLoading, error: amadeusError } = useAmadeusSearch();
   const [selectedFlight, setSelectedFlight] = useState(null);
   const [searched, setSearched] = useState(false);
   const [expandedFlightId, setExpandedFlightId] = useState(null);
@@ -346,8 +350,8 @@ const Flights = () => {
   // Search State
   const [tripType, setTripType] = useState('oneWay');
   const [ticketClass, setTicketClass] = useState('Economy');
-  const [fromLocation, setFromLocation] = useState('');
-  const [toLocation, setToLocation] = useState('');
+  const [fromLocation, setFromLocation] = useState(null);
+  const [toLocation, setToLocation] = useState(null);
   const [departureDate, setDepartureDate] = useState(getToday());
   const [returnDate, setReturnDate] = useState(getOvermorrow());
   const [passengers, setPassengers] = useState(1);
@@ -394,25 +398,119 @@ const Flights = () => {
     );
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
-    // Generate mock data based on inputs
-    const flights = generateMockFlights(
-      fromLocation,
-      toLocation,
-      departureDate,
-      tripType,
-      returnDate,
-    );
+
+    const classMap = { 'Economy': 'ECONOMY', 'Business': 'BUSINESS', 'First Class': 'FIRST' };
+    const originCode = fromLocation?.code || fromLocation;
+    const destCode = toLocation?.code || toLocation;
+
+    // Try Amadeus API first
+    if (originCode && destCode && originCode.length === 3 && destCode.length === 3) {
+      const result = await searchAmadeusFlights({
+        origin: originCode,
+        destination: destCode,
+        departureDate,
+        returnDate: tripType === 'roundTrip' ? returnDate : undefined,
+        adults: passengers,
+        travelClass: classMap[ticketClass] || 'ECONOMY',
+      });
+
+      if (result?.flights?.length > 0) {
+        // Transform Amadeus results to match existing flight card format
+        const transformed = result.flights.map((flight, idx) => {
+          const outbound = flight.itineraries[0];
+          const firstSeg = outbound.segments[0];
+          const lastSeg = outbound.segments[outbound.segments.length - 1];
+          const stops = outbound.segments.length === 1 ? 'Non-stop' : outbound.segments.length === 2 ? '1 Stop' : '2+ Stops';
+
+          const segments = outbound.segments.map((seg, sIdx) => ({
+            id: sIdx + 1,
+            from: seg.departure.airport,
+            to: seg.arrival.airport,
+            departure: new Date(seg.departure.time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
+            arrival: new Date(seg.arrival.time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
+            duration: seg.duration?.replace('PT', '').replace('H', 'h ').replace('M', 'm') || '',
+            durationVal: 0,
+            airline: seg.airlineName,
+            flightNumber: seg.flightNumber,
+            aircraft: seg.aircraft,
+          }));
+
+          const depTime = new Date(firstSeg.departure.time);
+          const arrTime = new Date(lastSeg.arrival.time);
+          const durationMs = arrTime - depTime;
+          const durationMins = Math.floor(durationMs / 60000);
+
+          const priceNGN = Math.round(flight.price.total * 1600);
+
+          let inbound = null;
+          if (flight.itineraries.length > 1) {
+            const ret = flight.itineraries[1];
+            const retFirst = ret.segments[0];
+            const retLast = ret.segments[ret.segments.length - 1];
+            inbound = {
+              date: returnDate,
+              departure: new Date(retFirst.departure.time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
+              arrival: new Date(retLast.arrival.time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
+              duration: ret.duration?.replace('PT', '').replace('H', 'h ').replace('M', 'm') || '',
+              stops: ret.segments.length === 1 ? 'Non-stop' : `${ret.segments.length - 1} Stop`,
+              airline: retFirst.airlineName,
+              from: retFirst.departure.airport,
+              to: retLast.arrival.airport,
+              segments: ret.segments.map((seg, sIdx) => ({
+                id: sIdx + 1,
+                from: seg.departure.airport,
+                to: seg.arrival.airport,
+                departure: new Date(seg.departure.time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
+                arrival: new Date(seg.arrival.time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
+                duration: seg.duration?.replace('PT', '').replace('H', 'h ').replace('M', 'm') || '',
+                durationVal: 0,
+                airline: seg.airlineName,
+                flightNumber: seg.flightNumber,
+                aircraft: seg.aircraft,
+              })),
+              layovers: [],
+            };
+          }
+
+          return {
+            id: idx + 1,
+            airline: firstSeg.airlineName,
+            logo: '',
+            departure: depTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
+            arrival: arrTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
+            duration: `${Math.floor(durationMins / 60)}h ${durationMins % 60}m`,
+            durationVal: durationMins,
+            price: `₦${priceNGN.toLocaleString()}`,
+            priceVal: priceNGN,
+            stops,
+            from: firstSeg.departure.airport,
+            to: lastSeg.arrival.airport,
+            date: departureDate,
+            segments,
+            layovers: [],
+            depHour: depTime.getHours(),
+            arrHour: arrTime.getHours(),
+            inbound,
+            isLive: true,
+          };
+        });
+
+        setAllFlights(transformed.sort((a, b) => a.priceVal - b.priceVal));
+        setSearched(true);
+        setFilters({ stops: new Set(), airlines: new Set(), times: new Set(), arrivalTimes: new Set() });
+        return;
+      }
+    }
+
+    // Fallback to mock data
+    const fromCode = originCode || '';
+    const toCode = destCode || '';
+    const flights = generateMockFlights(fromCode, toCode, departureDate, tripType, returnDate);
     setAllFlights(flights);
     setSearched(true);
-    // Reset filters
-    setFilters({
-      stops: new Set(),
-      airlines: new Set(),
-      times: new Set(),
-      arrivalTimes: new Set(),
-    });
+    setFilters({ stops: new Set(), airlines: new Set(), times: new Set(), arrivalTimes: new Set() });
   };
 
   // --- Filtering Logic ---
@@ -548,36 +646,22 @@ const Flights = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-2 border border-base-200 rounded-xl p-2 bg-base-200/50">
                   {/* From Field */}
                   <div className="bg-base-100 p-3 rounded-lg border border-transparent hover:border-base-300 transition-colors">
-                    <label className="text-xs text-base-content/60 font-medium mb-1 uppercase tracking-wide block">
-                      From
-                    </label>
-                    <input
-                      type="text"
+                    <LocationAutocomplete
                       value={fromLocation}
-                      onChange={(e) => setFromLocation(e.target.value)}
+                      onChange={(loc) => setFromLocation(loc)}
                       placeholder="City or Airport"
-                      className="w-full text-lg font-bold text-base-content bg-transparent border-none p-0 focus:ring-0 focus:outline-none placeholder:text-base-content/40"
+                      label="From"
                     />
-                    <div className="text-xs text-base-content/50 truncate mt-1">
-                      Origin
-                    </div>
                   </div>
 
                   {/* To Field */}
                   <div className="bg-base-100 p-3 rounded-lg border border-transparent hover:border-base-300 transition-colors">
-                    <label className="text-xs text-base-content/60 font-medium mb-1 uppercase tracking-wide block">
-                      To
-                    </label>
-                    <input
-                      type="text"
+                    <LocationAutocomplete
                       value={toLocation}
-                      onChange={(e) => setToLocation(e.target.value)}
+                      onChange={(loc) => setToLocation(loc)}
                       placeholder="City or Airport"
-                      className="w-full text-lg font-bold text-base-content bg-transparent border-none p-0 focus:ring-0 focus:outline-none placeholder:text-base-content/40"
+                      label="To"
                     />
-                    <div className="text-xs text-base-content/50 truncate mt-1">
-                      Destination
-                    </div>
                   </div>
 
                   {/* Date Field(s) */}
@@ -723,9 +807,19 @@ const Flights = () => {
                 </div>
               )}
 
-              <div className="mt-4 flex justify-end">
-                <button type="submit" className="btn btn-primary-custom">
-                  Search Flights
+              <div className="mt-4 flex items-center justify-between">
+                {amadeusError && (
+                  <p className="text-sm text-warning flex items-center gap-1">
+                    <Info size={14} /> Using sample results — live search unavailable
+                  </p>
+                )}
+                {!amadeusError && <div />}
+                <button type="submit" className="btn btn-primary-custom" disabled={amadeusLoading}>
+                  {amadeusLoading ? (
+                    <><Loader2 size={18} className="animate-spin" /> Searching...</>
+                  ) : (
+                    'Search Flights'
+                  )}
                 </button>
               </div>
             </div>

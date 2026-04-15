@@ -21,10 +21,10 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-14 sm:h-16">
           {/* Logo */}
           <Link to="/" className="text-lg sm:text-2xl font-medium flex items-center gap-2 text-white">
-            <img src="https://abjandhtravels.com/wp-content/uploads/2025/10/cropped-cropped-cropped-cropped-ABJ-H-LOGO-Cropped-Semi-Final-1-300x276.png" alt="" 
-            className='w-15 h-15 rounded-full shadow-lg'
+            <img src="https://ui-avatars.com/api/?name=Travel+Pro&background=0D8ABC&color=fff&size=300" alt="TravelPro Logo" 
+            className='w-10 h-10 rounded-full shadow-lg'
             />
-            <span className="hidden md:inline">ABJ & H Travels</span>
+            <span className="hidden md:inline">TravelPro</span>
           </Link>
 
           {/* Desktop Menu */}

@@ -228,13 +228,13 @@ export default function AdminSidebar() {
       <div className="p-6 border-b border-slate-700 flex-shrink-0">
         <div className="flex items-center gap-3">
           <img
-            src="https://abjandhtravels.com/wp-content/uploads/2025/10/cropped-cropped-cropped-cropped-ABJ-H-LOGO-Cropped-Semi-Final-1-300x276.png"
-            alt=""
+            src="https://ui-avatars.com/api/?name=Travel+Pro&background=0D8ABC&color=fff&size=300"
+            alt="TravelPro Logo"
             className="w-10 h-10 rounded-full shadow-lg"
           />
           <div>
             <h1 className="text-lg font-medium ">
-              ABJ & H Travel
+              TravelPro
             </h1>
             <p className="text-xs text-gray-400">Management Portal</p>
           </div>

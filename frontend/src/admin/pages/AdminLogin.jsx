@@ -47,12 +47,12 @@ export default function AdminLogin() {
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-8">
             <img
-            src="https://abjandhtravels.com/wp-content/uploads/2025/10/cropped-cropped-cropped-cropped-ABJ-H-LOGO-Cropped-Semi-Final-1-300x276.png"
-            alt=""
+            src="https://ui-avatars.com/api/?name=Travel+Pro&background=0D8ABC&color=fff&size=300"
+            alt="TravelPro Logo"
             className="w-10 h-10 rounded-full shadow-lg"
           />
             <div>
-              <h1 className="text-2xl font-medium text-white">ABJ&H Travels</h1>
+              <h1 className="text-2xl font-medium text-white">TravelPro</h1>
               <p className="text-white/80 text-sm">Management Portal</p>
             </div>
           </div>
@@ -97,12 +97,12 @@ export default function AdminLogin() {
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center gap-3 mb-8">
             <img
-            src="https://abjandhtravels.com/wp-content/uploads/2025/10/cropped-cropped-cropped-cropped-ABJ-H-LOGO-Cropped-Semi-Final-1-300x276.png"
-            alt=""
+            src="https://ui-avatars.com/api/?name=Travel+Pro&background=0D8ABC&color=fff&size=300"
+            alt="TravelPro Logo"
             className="w-10 h-10 rounded-full shadow-lg"
           />
             <div>
-              <h1 className="text-2xl font-medium text-base-content">TravelAdmin</h1>
+              <h1 className="text-2xl font-medium text-base-content">TravelPro</h1>
               <p className="text-base-content/60 text-sm">Management Portal</p>
             </div>
           </div>

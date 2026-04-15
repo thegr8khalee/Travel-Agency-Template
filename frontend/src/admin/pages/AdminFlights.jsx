@@ -11,8 +11,13 @@ import {
   Clock,
   MapPin,
   Users,
-  Filter
+  Filter,
+  RefreshCw,
+  Download,
+  Loader2
 } from 'lucide-react';
+import { useAmadeusSearch } from '../../hooks/useAmadeusSearch';
+import LocationAutocomplete from '../../components/LocationAutocomplete';
 
 export default function AdminFlights() {
   const [flights, setFlights] = useState([
@@ -40,6 +45,48 @@ export default function AdminFlights() {
     class: 'Economy',
     status: 'available'
   });
+
+  // Amadeus search state
+  const { searchFlights: searchAmadeusFlights, loading: searchLoading, error: searchError, flightResults } = useAmadeusSearch();
+  const [showAmadeusModal, setShowAmadeusModal] = useState(false);
+  const [amadeusSearchParams, setAmadeusSearchParams] = useState({
+    origin: null,
+    destination: null,
+    departureDate: '',
+    travelClass: 'ECONOMY'
+  });
+
+  const handleAmadeusSearch = async (e) => {
+    e.preventDefault();
+    if (!amadeusSearchParams.origin || !amadeusSearchParams.destination || !amadeusSearchParams.departureDate) return;
+
+    await searchAmadeusFlights({
+      origin: amadeusSearchParams.origin.code,
+      destination: amadeusSearchParams.destination.code,
+      departureDate: amadeusSearchParams.departureDate,
+      travelClass: amadeusSearchParams.travelClass,
+      adults: 1
+    });
+  };
+
+  const handleImportFlight = (flight) => {
+    const segment = flight.itineraries[0].segments[0];
+    const lastSeg = flight.itineraries[0].segments[flight.itineraries[0].segments.length - 1];
+    const newFlight = {
+      id: Date.now(),
+      airline: segment.airlineName,
+      flightNo: segment.flightNumber,
+      from: segment.departure.airport,
+      to: lastSeg.arrival.airport,
+      departure: segment.departure.time,
+      arrival: lastSeg.arrival.time,
+      price: Math.round(flight.price.total * 1600),
+      seats: flight.seatsAvailable || 10,
+      class: segment.class || 'Economy',
+      status: 'available'
+    };
+    setFlights([...flights, newFlight]);
+  };
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(amount);
@@ -138,9 +185,14 @@ export default function AdminFlights() {
           <h1 className="text-2xl font-bold text-base-content">Flight Inventory</h1>
           <p className="text-base-content/60">Manage available flights and schedules</p>
         </div>
-        <button onClick={() => handleOpenModal()} className="btn btn-primary-custom gap-2">
-          <Plus size={18} /> Add Flight
-        </button>
+        <div className="flex gap-2">
+          <button onClick={() => setShowAmadeusModal(true)} className="btn btn-secondary gap-2">
+            <RefreshCw size={18} /> Search Amadeus
+          </button>
+          <button onClick={() => handleOpenModal()} className="btn btn-primary-custom gap-2">
+            <Plus size={18} /> Add Flight
+          </button>
+        </div>
       </div>
 
       {/* Stats */}
@@ -496,6 +548,118 @@ export default function AdminFlights() {
             </div>
           </div>
           <div className="modal-backdrop bg-black/50" onClick={() => setViewingFlight(null)}></div>
+        </div>
+      )}
+
+      {/* Amadeus Search Modal */}
+      {showAmadeusModal && (
+        <div className="modal modal-open">
+          <div className="modal-box max-w-4xl">
+            <button onClick={() => setShowAmadeusModal(false)} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+              <X size={20} />
+            </button>
+
+            <h3 className="font-bold text-lg mb-4">Search Live Flights (Amadeus)</h3>
+
+            <form onSubmit={handleAmadeusSearch} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <LocationAutocomplete
+                  label="From"
+                  value={amadeusSearchParams.origin}
+                  onChange={(loc) => setAmadeusSearchParams({ ...amadeusSearchParams, origin: loc })}
+                  placeholder="Departure city/airport"
+                  required
+                />
+                <LocationAutocomplete
+                  label="To"
+                  value={amadeusSearchParams.destination}
+                  onChange={(loc) => setAmadeusSearchParams({ ...amadeusSearchParams, destination: loc })}
+                  placeholder="Arrival city/airport"
+                  required
+                />
+                <div>
+                  <label className="label"><span className="label-text font-medium">Departure Date *</span></label>
+                  <input
+                    type="date"
+                    value={amadeusSearchParams.departureDate}
+                    onChange={(e) => setAmadeusSearchParams({ ...amadeusSearchParams, departureDate: e.target.value })}
+                    min={new Date().toISOString().split('T')[0]}
+                    className="input input-bordered w-full"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="label"><span className="label-text font-medium">Class</span></label>
+                  <select
+                    value={amadeusSearchParams.travelClass}
+                    onChange={(e) => setAmadeusSearchParams({ ...amadeusSearchParams, travelClass: e.target.value })}
+                    className="select select-bordered w-full"
+                  >
+                    <option value="ECONOMY">Economy</option>
+                    <option value="BUSINESS">Business</option>
+                    <option value="FIRST">First Class</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" className="btn btn-primary" disabled={searchLoading}>
+                {searchLoading ? (
+                  <><Loader2 size={18} className="animate-spin" /> Searching...</>
+                ) : (
+                  <><Search size={18} /> Search Flights</>
+                )}
+              </button>
+            </form>
+
+            {searchError && (
+              <div className="alert alert-error mt-4">
+                <span>{searchError}</span>
+              </div>
+            )}
+
+            {flightResults?.flights?.length > 0 && (
+              <div className="mt-6">
+                <h4 className="font-semibold mb-3">Found {flightResults.flights.length} flights</h4>
+                <div className="space-y-3 max-h-96 overflow-y-auto">
+                  {flightResults.flights.map((flight) => {
+                    const segment = flight.itineraries[0].segments[0];
+                    const lastSeg = flight.itineraries[0].segments[flight.itineraries[0].segments.length - 1];
+                    return (
+                      <div key={flight.id} className="p-4 border border-base-300 rounded-lg flex items-center justify-between hover:bg-base-200">
+                        <div className="flex items-center gap-4">
+                          <Plane size={24} className="text-primary" />
+                          <div>
+                            <p className="font-semibold">{segment.airlineName} {segment.flightNumber}</p>
+                            <p className="text-sm text-base-content/60">
+                              {segment.departure.airport} → {lastSeg.arrival.airport}
+                            </p>
+                            <p className="text-xs text-base-content/40">
+                              {new Date(segment.departure.time).toLocaleString()}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-bold text-primary">{flight.price.currency} {flight.price.total}</p>
+                          <p className="text-xs text-base-content/60">{flight.seatsAvailable} seats</p>
+                          <button
+                            onClick={() => handleImportFlight(flight)}
+                            className="btn btn-sm btn-outline btn-primary mt-2 gap-1"
+                          >
+                            <Download size={14} /> Import
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            <div className="modal-action">
+              <button onClick={() => setShowAmadeusModal(false)} className="btn">Close</button>
+            </div>
+          </div>
+          <div className="modal-backdrop bg-black/50" onClick={() => setShowAmadeusModal(false)} />
         </div>
       )}
     </div>
